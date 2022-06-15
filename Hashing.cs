@@ -36,41 +36,36 @@ public static class Hashing
     private static System.Security.Cryptography.MD5 _md5 = System.Security.Cryptography.MD5.Create();
     private static Crc32 _crc32 = new Crc32();
 
-    public static byte[] SHA512(string str)
+    public static byte[] SHA512(byte[] inputBytes)
     {
-        byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(str);
         return _sha512.ComputeHash(inputBytes);
     }
 
-    public static byte[] SHA256(string str)
+    public static byte[] SHA256(byte[] inputBytes)
     {
-        byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(str);
         return _sha256.ComputeHash(inputBytes);
     }
 
-    public static byte[] SHA1(string str)
+    public static byte[] SHA1(byte[] inputBytes)
     {
-        byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(str);
         return _sha1.ComputeHash(inputBytes);
     }
 
-    public static byte[] MD5(string str)
+    public static byte[] MD5(byte[] inputBytes)
     {
-        byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(str);
         return _md5.ComputeHash(inputBytes);
     }
 
-    public static uint CRC32(string str)
+    public static uint CRC32(byte[] inputBytes)
     {
-        byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(str);
-        return _crc32.ComputeHash(str);
+        return _crc32.ComputeHash(inputBytes);
     }
 
-    public static uint Adler32(string str)
+    public static uint Adler32(byte[] inputBytes)
     {
         const uint mod = 65521;
         uint a = 1, b = 0;
-        foreach (char c in str)
+        foreach (char c in inputBytes)
         {
             a = (a + c) % mod;
             b = (b + a) % mod;
@@ -78,25 +73,24 @@ public static class Hashing
         return (b << 16) | a;
     }
 
-    public static uint FNV32(string str)
+    public static uint FNV32(byte[] inputBytes)
     {
         const uint fnv_offset_basis = 0x811c9dc5;
         const uint fnv_prime = 0x01000193;
         uint hash = fnv_offset_basis;
         uint i = 0;
 
-        for (i = 0; i < str.Length; i++)
+        for (i = 0; i < inputBytes.Length; i++)
         {
-            hash ^= ((byte)str[(int)i]);
+            hash ^= inputBytes[i];
             hash *= fnv_prime;
         }
 
         return hash;
     }
 
-    public static byte[] Fletcher(string str, int n = 32) // Fletcher 32, 16, 64
+    public static byte[] Fletcher(byte[] inputBytes, int n = 32) // Fletcher 32, 16, 64
     {
-        byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(str);
 
         IEnumerable<ulong> Blockify(IReadOnlyList<byte> inputAsBytes, int blockSize)
         {
