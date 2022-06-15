@@ -22,264 +22,220 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.Write("random strings count = ");
-        int count = int.Parse(Console.ReadLine());
         const int maxInputLength = 8;
-        const int maxHashLength = 4;
+        const int maxHashByteLength = 4;
+        Console.WriteLine($"maxInputLength = {maxInputLength}");
+        Console.WriteLine($"maxHashByteLength = {maxHashByteLength}");
+        Console.Write("random inputs count = ");
+        int randomInputsCount = int.Parse(Console.ReadLine());
 
-        // guid
+        // guid_8
         {
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
                 var timer = System.Diagnostics.Stopwatch.StartNew();
-                string guid = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
+                string guid_8 = System.Guid.NewGuid().ToString().Substring(0, 8);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                if (hashes.Contains(guid))
+                if (hashes.Contains(guid_8))
                     collisionCount++;
                 else
-                    hashes.Add(guid);
+                    hashes.Add(guid_8);
             }
-            Console.WriteLine($"guid - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"guid_8 - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // guid_bytes
+        // guid_random_hex_string8
         {
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
                 var timer = System.Diagnostics.Stopwatch.StartNew();
-                string guid_bytes = System.Text.Encoding.ASCII.GetString(StringGUID.SystemGUIDBytes(maxInputLength));
+                string guid_random_hex_string8 = GUID.Random(8, new Random(i), GUID.Type.Hexadecimal);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                if (hashes.Contains(guid_bytes))
+                if (hashes.Contains(guid_random_hex_string8))
                     collisionCount++;
                 else
-                    hashes.Add(guid_bytes);
+                    hashes.Add(guid_random_hex_string8);
             }
-            Console.WriteLine($"guid_bytes - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"guid_random_hex_string8 - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // guid_random_random_seed
+        // guid_random_hex_uint
         {
-            HashSet<string> hashes = new HashSet<string>();
+            HashSet<ulong> hashes = new HashSet<ulong>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
                 var timer = System.Diagnostics.Stopwatch.StartNew();
-                string guid_random_random_seed = StringGUID.RandomAlphaNumeric(maxInputLength, i);
+                ulong guid_random_hex_ulong = Convert.ToUInt64(GUID.Random(16, new Random(i), GUID.Type.Hexadecimal), 16);
                 timer.Stop();
-                // Console.WriteLine(guid_random_random_seed);
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                if (hashes.Contains(guid_random_random_seed))
+                if (hashes.Contains(guid_random_hex_ulong))
                     collisionCount++;
                 else
-                    hashes.Add(guid_random_random_seed);
+                    hashes.Add(guid_random_hex_ulong);
             }
-            Console.WriteLine($"guid_random_random_seed - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"guid_random_hex_ulong - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // guid_random_fixed_seed
+        // guid_random_hex_uint
         {
-            HashSet<string> hashes = new HashSet<string>();
+            HashSet<uint> hashes = new HashSet<uint>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            Random random = new Random();
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
                 var timer = System.Diagnostics.Stopwatch.StartNew();
-                string guid_random_fixed_seed = StringGUID.RandomAlphaNumeric(maxInputLength, random);
+                uint guid_random_hex_uint = Convert.ToUInt32(GUID.Random(8, new Random(i), GUID.Type.Hexadecimal), 16);
                 timer.Stop();
-                // Console.WriteLine(guid_random_fixed_seed);
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                if (hashes.Contains(guid_random_fixed_seed))
+                if (hashes.Contains(guid_random_hex_uint))
                     collisionCount++;
                 else
-                    hashes.Add(guid_random_fixed_seed);
+                    hashes.Add(guid_random_hex_uint);
             }
-            Console.WriteLine($"guid_random_fixed_seed - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"guid_random_hex_uint - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // guid_random_crypto
+        // guid_random_hex_ushort
         {
-            HashSet<string> hashes = new HashSet<string>();
+            HashSet<ushort> hashes = new HashSet<ushort>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            Random random = new Random();
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
                 var timer = System.Diagnostics.Stopwatch.StartNew();
-                string guid_random_crypto = StringGUID.RandomAlphaNumeric(maxInputLength);
+                ushort guid_random_hex_ushort = Convert.ToUInt16(GUID.Random(4, new Random(i), GUID.Type.Hexadecimal), 16);
                 timer.Stop();
-                // Console.WriteLine(guid_random_crypto);
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                if (hashes.Contains(guid_random_crypto))
+                if (hashes.Contains(guid_random_hex_ushort))
                     collisionCount++;
                 else
-                    hashes.Add(guid_random_crypto);
+                    hashes.Add(guid_random_hex_ushort);
             }
-            Console.WriteLine($"guid_random_crypto - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"guid_random_hex_ushort - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // guid_random_bytes0
+        // sha512
         {
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            Random random = new Random();
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                var timer = System.Diagnostics.Stopwatch.StartNew();
-                string guid_random_bytes0 = System.Text.Encoding.ASCII.GetString(StringGUID.RandomBytes(maxInputLength, i));
-                timer.Stop();
-                // Console.WriteLine(guid_random_bytes0);
-                elapsedMS += timer.ElapsedMilliseconds;
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
 
-                if (hashes.Contains(guid_random_bytes0))
-                    collisionCount++;
-                else
-                    hashes.Add(guid_random_bytes0);
-            }
-            Console.WriteLine($"guid_random_bytes0 - timeMS:{elapsedMS} collisions:{collisionCount}");
-        }
-
-        // guid_random_bytes1
-        {
-            HashSet<string> hashes = new HashSet<string>();
-            long elapsedMS = 0;
-            uint collisionCount = 0;
-            Random random = new Random();
-            for (int i = 0; i < count; i++)
-            {
-                var timer = System.Diagnostics.Stopwatch.StartNew();
-                string guid_random_bytes1 = System.Text.Encoding.ASCII.GetString(StringGUID.RandomBytes(maxInputLength));
-                timer.Stop();
-                // Console.WriteLine(guid_random_bytes1);
-                elapsedMS += timer.ElapsedMilliseconds;
-
-                if (hashes.Contains(guid_random_bytes1))
-                    collisionCount++;
-                else
-                    hashes.Add(guid_random_bytes1);
-            }
-            Console.WriteLine($"guid_random_bytes1 - timeMS:{elapsedMS} collisions:{collisionCount}");
-        }
-
-        return;
-
-        // sha512_32
-        {
-            HashSet<string> hashes = new HashSet<string>();
-            long elapsedMS = 0;
-            uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
-            {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 byte[] hashBytes = Hashing.SHA512(inputBytes);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                Array.Resize(ref hashBytes, maxHashLength); string sha512_32 = Convert.ToHexString(hashBytes);
+                Array.Resize(ref hashBytes, maxHashByteLength); string sha512 = Convert.ToHexString(hashBytes);
 
-                if (hashes.Contains(sha512_32))
+                if (hashes.Contains(sha512))
                     collisionCount++;
                 else
-                    hashes.Add(sha512_32);
+                    hashes.Add(sha512);
             }
-            Console.WriteLine($"sha512_32 - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"sha512 - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // sha256_32
+        // sha256
         {
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 byte[] hashBytes = Hashing.SHA256(inputBytes);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                Array.Resize(ref hashBytes, maxHashLength); string sha256_32 = Convert.ToHexString(hashBytes);
+                Array.Resize(ref hashBytes, maxHashByteLength); string sha256 = Convert.ToHexString(hashBytes);
 
-                if (hashes.Contains(sha256_32))
+                if (hashes.Contains(sha256))
                     collisionCount++;
                 else
-                    hashes.Add(sha256_32);
+                    hashes.Add(sha256);
             }
-            Console.WriteLine($"sha256_32 - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"sha256 - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // sha1_32
+        // sha1
         {
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 byte[] hashBytes = Hashing.SHA1(inputBytes);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                Array.Resize(ref hashBytes, maxHashLength); string sha1_32 = Convert.ToHexString(hashBytes);
+                Array.Resize(ref hashBytes, maxHashByteLength); string sha1 = Convert.ToHexString(hashBytes);
 
-                if (hashes.Contains(sha1_32))
+                if (hashes.Contains(sha1))
                     collisionCount++;
                 else
-                    hashes.Add(sha1_32);
+                    hashes.Add(sha1);
             }
-            Console.WriteLine($"sha1_32 - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"sha1 - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
-        // md5_32
+        // md5
         {
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 byte[] hashBytes = Hashing.MD5(inputBytes);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
-                Array.Resize(ref hashBytes, maxHashLength); string md5_32 = Convert.ToHexString(hashBytes);
+                Array.Resize(ref hashBytes, maxHashByteLength); string md5 = Convert.ToHexString(hashBytes);
 
-                if (hashes.Contains(md5_32))
+                if (hashes.Contains(md5))
                     collisionCount++;
                 else
-                    hashes.Add(md5_32);
+                    hashes.Add(md5);
             }
-            Console.WriteLine($"md5_32 - timeMS:{elapsedMS} collisions:{collisionCount}");
+            Console.WriteLine($"md5 - timeMS:{elapsedMS} collisions:{collisionCount}");
         }
 
         // fnv32
@@ -287,15 +243,15 @@ class Program
             HashSet<uint> hashes = new HashSet<uint>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 uint fnv32 = Hashing.FNV32(inputBytes);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
                 if (hashes.Contains(fnv32))
@@ -311,15 +267,15 @@ class Program
             HashSet<uint> hashes = new HashSet<uint>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 uint crc32 = Hashing.CRC32(inputBytes);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
                 if (hashes.Contains(crc32))
@@ -335,15 +291,15 @@ class Program
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 string fletcher64 = Convert.ToHexString(Hashing.Fletcher(inputBytes, 64));
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
                 if (hashes.Contains(fletcher64))
@@ -359,15 +315,15 @@ class Program
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 string fletcher32 = Convert.ToHexString(Hashing.Fletcher(inputBytes, 32));
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
                 if (hashes.Contains(fletcher32))
@@ -383,15 +339,15 @@ class Program
             HashSet<string> hashes = new HashSet<string>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 string fletcher16 = Convert.ToHexString(Hashing.Fletcher(inputBytes, 16));
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
                 if (hashes.Contains(fletcher16))
@@ -407,15 +363,15 @@ class Program
             HashSet<uint> hashes = new HashSet<uint>();
             long elapsedMS = 0;
             uint collisionCount = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < randomInputsCount; i++)
             {
-                string input = System.Guid.NewGuid().ToString().Substring(0, maxInputLength);
-                // input = input.Substring(0, 16);
-                // string input = i.ToString();
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                string inputString = GUID.Random(maxInputLength, new Random(i), GUID.Type.Alphanumeric);
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+
                 var timer = System.Diagnostics.Stopwatch.StartNew();
                 uint adler32 = Hashing.Adler32(inputBytes);
                 timer.Stop();
+
                 elapsedMS += timer.ElapsedMilliseconds;
 
                 if (hashes.Contains(adler32))

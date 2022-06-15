@@ -1,6 +1,6 @@
 public static class Hashing
 {
-    public class Crc32
+    private class Crc32
     {
         private readonly uint _generator = 0xEDB88320;
         private static uint[] _checksumTable;
@@ -61,26 +61,13 @@ public static class Hashing
         return _crc32.ComputeHash(inputBytes);
     }
 
-    public static uint Adler32(byte[] inputBytes)
-    {
-        const uint mod = 65521;
-        uint a = 1, b = 0;
-        foreach (char c in inputBytes)
-        {
-            a = (a + c) % mod;
-            b = (b + a) % mod;
-        }
-        return (b << 16) | a;
-    }
-
     public static uint FNV32(byte[] inputBytes)
     {
         const uint fnv_offset_basis = 0x811c9dc5;
         const uint fnv_prime = 0x01000193;
         uint hash = fnv_offset_basis;
-        uint i = 0;
 
-        for (i = 0; i < inputBytes.Length; i++)
+        for (uint i = 0; i < inputBytes.Length; i++)
         {
             hash ^= inputBytes[i];
             hash *= fnv_prime;
@@ -89,9 +76,22 @@ public static class Hashing
         return hash;
     }
 
+    public static uint Adler32(byte[] inputBytes)
+    {
+        const uint mod = 65521;
+        uint a = 1;
+        uint b = 0;
+        for (int i = 0; i < inputBytes.Length; i++)
+        {
+            uint c = inputBytes[i];
+            a = (a + c) % mod;
+            b = (b + a) % mod;
+        }
+        return (b << 16) | a;
+    }
+
     public static byte[] Fletcher(byte[] inputBytes, int n = 32) // Fletcher 32, 16, 64
     {
-
         IEnumerable<ulong> Blockify(IReadOnlyList<byte> inputAsBytes, int blockSize)
         {
             var i = 0;
